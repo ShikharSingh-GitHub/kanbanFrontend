@@ -13,7 +13,7 @@ const Board = () => {
     const fetchTasks = async () => {
       setLoading(true);
       try {
-        const { data } = await axios.get('/api/tasks');
+        const { data } = await axios.get('https://kanban-backend-three.vercel.app/api/tasks');
         setTasks(data);
       } catch (error) {
         setError('Error fetching tasks');
@@ -32,7 +32,7 @@ const Board = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const { data } = await axios.post('/api/tasks', { ...newTask, status: 'To Do' });
+      const { data } = await axios.post('https://kanban-backend-three.vercel.app/api/tasks', { ...newTask, status: 'To Do' });
       setTasks([...tasks, data]);
       setNewTask({ title: '', description: '' });
     } catch (error) {
@@ -53,7 +53,7 @@ const Board = () => {
     setTasks(updatedTasks);
 
     try {
-      await axios.put(`/api/tasks/${draggedTask._id}`, { status: destination.droppableId });
+      await axios.put(`https://kanban-backend-three.vercel.app/api/tasks/${draggedTask._id}`, { status: destination.droppableId });
     } catch (error) {
       setError('Error updating task status');
     }
@@ -88,8 +88,8 @@ const Board = () => {
           value={newTask.description}
           onChange={handleInputChange}
         />
-        <button type="submit" disabled={loading}>
-          {loading ? 'Adding...' : 'Add Task'}
+        <button type="submit">
+          Add Task
         </button>
       </form>
       {error && <p style={{ color: 'red' }}>{error}</p>}
