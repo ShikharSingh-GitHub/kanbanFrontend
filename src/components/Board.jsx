@@ -62,7 +62,7 @@ const Board = () => {
   const handleDelete = async (taskId) => {
     setLoading(true);
     try {
-      await axios.delete(`/api/tasks/${taskId}`);
+      await axios.delete(`https://kanban-backend-three.vercel.app/api/tasks/${taskId}`);
       setTasks(tasks.filter(task => task._id !== taskId));
     } catch (error) {
       setError('Error deleting task');
