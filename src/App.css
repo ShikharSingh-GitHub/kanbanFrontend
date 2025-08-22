@@ -7,6 +7,11 @@ body {
 }
 
 .app {
+  min-height: 100vh;
+  background-color: #f7fafc;
+}
+
+.main-content {
   text-align: center;
   margin: 0 auto;
   max-width: 1200px;

@@ -1,13 +1,22 @@
 import React from 'react';
 import './App.css';
+import { AuthProvider } from './contexts/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
+import Header from './components/Header';
 import Board from './components/Board';
 
 const App = () => {
   return (
-    <div className="app">
-      <h1>Kanban Board</h1>
-      <Board />
-    </div>
+    <AuthProvider>
+      <div className="app">
+        <ProtectedRoute>
+          <Header />
+          <main className="main-content">
+            <Board />
+          </main>
+        </ProtectedRoute>
+      </div>
+    </AuthProvider>
   );
 };
 
