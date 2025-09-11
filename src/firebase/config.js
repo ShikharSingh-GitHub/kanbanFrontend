@@ -4,12 +4,13 @@ import { getAuth, GithubAuthProvider, GoogleAuthProvider } from 'firebase/auth';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDMZPZNUY85gPAg6JX3a-RZxfq9oY3Z3l0",
-  authDomain: "kanban-aedf3.firebaseapp.com",
-  projectId: "kanban-aedf3",
-  storageBucket: "kanban-aedf3.appspot.com",
-  messagingSenderId: "130658872894",
-  appId: "1:130658872894:web:2012cb92117d470e3aab6f"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
 // Initialize Firebase
