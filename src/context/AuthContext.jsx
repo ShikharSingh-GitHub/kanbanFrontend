@@ -2,8 +2,10 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { 
   signInWithPopup, 
   signOut, 
-  onAuthStateChanged 
+  onAuthStateChanged,
+  getIdToken
 } from 'firebase/auth';
+import { setAuthToken } from '../api';
 import { auth, googleProvider, githubProvider } from '../firebase/config';
 
 const AuthContext = createContext();
@@ -39,8 +41,19 @@ export const AuthProvider = ({ children }) => {
 
   // Set up auth state listener
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setCurrentUser(user);
+      if (user) {
+        try {
+          const token = await getIdToken(user);
+          setAuthToken(token);
+        } catch (err) {
+          console.error('Failed to get ID token:', err);
+          setAuthToken(null);
+        }
+      } else {
+        setAuthToken(null);
+      }
       setLoading(false);
     });
 
