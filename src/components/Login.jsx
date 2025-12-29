@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { FaGoogle } from 'react-icons/fa';
 
 const Login = () => {
   const { signInWithGoogle } = useAuth();
   const [error, setError] = useState('');
+  const primaryRef = useRef(null);
 
   const handleGoogleSignIn = async () => {
     try {
@@ -16,13 +17,18 @@ const Login = () => {
     }
   };
 
+  useEffect(() => {
+    // focus the primary action for keyboard users when modal mounts
+    if (primaryRef.current) primaryRef.current.focus();
+  }, []);
+
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-slate-900/60 to-slate-800/40 flex items-center justify-center p-4">
-      <div className="bg-white/95 backdrop-blur-sm p-8 rounded-xl shadow-2xl w-full max-w-md">
+    <div className="login-backdrop" role="presentation">
+      <div className="login-modal" role="dialog" aria-modal="true" aria-label="Sign in to Taskify">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-16 h-16 rounded-full bg-blue-500 flex items-center justify-center text-white text-2xl font-bold">KB</div>
-          <h2 className="text-3xl font-extrabold">Kanban Board</h2>
-          <p className="text-sm text-gray-600 text-center">Sign in to access your personal kanban board and manage tasks.</p>
+          <div className="login-brand bg-blue-500 text-white text-2xl">KB</div>
+          <h2 className="text-3xl font-extrabold">Taskify</h2>
+          <p className="text-sm text-gray-600 text-center">Sign in to access your personal Taskify board and manage tasks.</p>
         </div>
 
         {error && (
@@ -33,8 +39,9 @@ const Login = () => {
 
         <div className="mt-6 space-y-4">
           <button
+            ref={primaryRef}
             onClick={handleGoogleSignIn}
-            className="w-full flex items-center justify-center gap-3 bg-white border border-gray-200 hover:shadow-sm text-gray-800 font-semibold py-2 px-4 rounded transition duration-150"
+            className="w-full flex items-center justify-center gap-3 btn-ghost focus-ring font-semibold py-3 px-4 rounded transition duration-150"
             aria-label="Sign in with Google"
           >
             <FaGoogle className="text-red-500" />
