@@ -1,6 +1,6 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import api from '../api';
+import { DragDropContext, Droppable } from '@hello-pangea/dnd';
 import Column from './Column';
 
 const Board = () => {
@@ -13,7 +13,7 @@ const Board = () => {
     const fetchTasks = async () => {
       setLoading(true);
       try {
-        const { data } = await axios.get('https://kanban-backend-three.vercel.app/api/tasks');
+        const { data } = await api.get('/api/tasks');
         setTasks(data);
       } catch (error) {
         setError('Error fetching tasks');
@@ -32,7 +32,7 @@ const Board = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const { data } = await axios.post('https://kanban-backend-three.vercel.app/api/tasks', { ...newTask, status: 'To Do' });
+      const { data } = await api.post('/api/tasks', { ...newTask, status: 'To Do' });
       setTasks([...tasks, data]);
       setNewTask({ title: '', description: '' });
     } catch (error) {
@@ -53,7 +53,7 @@ const Board = () => {
     setTasks(updatedTasks);
 
     try {
-      await axios.put(`https://kanban-backend-three.vercel.app/api/tasks/${draggedTask._id}`, { status: destination.droppableId });
+      await api.put(`/api/tasks/${draggedTask._id}`, { status: destination.droppableId });
     } catch (error) {
       setError('Error updating task status');
     }
@@ -62,7 +62,7 @@ const Board = () => {
   const handleDelete = async (taskId) => {
     setLoading(true);
     try {
-      await axios.delete(`https://kanban-backend-three.vercel.app/api/tasks/${taskId}`);
+      await api.delete(`/api/tasks/${taskId}`);
       setTasks(tasks.filter(task => task._id !== taskId));
     } catch (error) {
       setError('Error deleting task');

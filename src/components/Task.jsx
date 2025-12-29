@@ -1,12 +1,11 @@
-import axios from 'axios';
 import React from 'react';
+import api from '../api';
 
 const Task = ({ task, onDelete }) => {
   const handleDelete = async () => {
     try {
-      await axios.delete(`https://kanban-backend-three.vercel.app/api/tasks/${task._id}`);
-      onDelete(task._id); // Call the onDelete function passed from the parent
-      window.location.reload();
+      await api.delete(`/api/tasks/${task._id}`);
+      onDelete(task._id);
     } catch (error) {
       console.error('Error deleting task:', error);
     }
