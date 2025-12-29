@@ -25,10 +25,12 @@ const Login = () => {
   return (
     <div className="login-backdrop" role="presentation">
       <div className="login-modal" role="dialog" aria-modal="true" aria-label="Sign in to Taskify">
-        <div className="flex flex-col items-center gap-4">
-          <div className="login-brand bg-blue-500 text-white text-2xl">KB</div>
-          <h2 className="text-3xl font-extrabold">Taskify</h2>
-          <p className="text-sm text-gray-600 text-center">Sign in to access your personal Taskify board and manage tasks.</p>
+        <div className="login-header">
+          <div className="login-brand bg-blue-500 text-white text-2xl">TSKFY</div>
+          <div>
+            <h2 className="text-3xl font-extrabold">Taskify</h2>
+            <p className="login-desc">Sign in to access your personal Taskify board and manage tasks.</p>
+          </div>
         </div>
 
         {error && (
@@ -37,18 +39,18 @@ const Login = () => {
           </div>
         )}
 
-        <div className="mt-6 space-y-4">
+        <div className="actions">
           <button
             ref={primaryRef}
             onClick={handleGoogleSignIn}
-            className="w-full flex items-center justify-center gap-3 btn-ghost focus-ring font-semibold py-3 px-4 rounded transition duration-150"
+            className="btn-ghost focus-ring font-semibold"
             aria-label="Sign in with Google"
           >
-            <FaGoogle className="text-red-500" />
-            <span>Continue with Google</span>
+            <FaGoogle style={{color:'#ef4444'}} />
+            <span style={{marginLeft:10}}>Continue with Google</span>
           </button>
 
-          <div className="text-xs text-center text-gray-500">By continuing, you agree to the app's Terms.</div>
+          <div className="legal">By continuing, you agree to the app's Terms.</div>
         </div>
       </div>
     </div>

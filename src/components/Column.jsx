@@ -11,6 +11,8 @@ const Column = ({ task, index, onDelete }) => {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           className="task"
+          role="article"
+          aria-label={task.title}
         >
           <Task task={task} onDelete={onDelete} />
         </div>

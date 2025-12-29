@@ -1,6 +1,8 @@
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
+/* Minimal global reset — visual styles are handled in App.css */
+html, body, #root {
+  height: 100%;
   margin: 0;
   padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }

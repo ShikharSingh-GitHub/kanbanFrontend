@@ -24,14 +24,26 @@ const Profile = ({ onSaved }) => {
   return (
     <div className="login-backdrop">
       <div className="login-modal" role="dialog" aria-modal="true" aria-label="Complete your profile">
-        <h2 className="text-2xl font-bold mb-4">Almost there — set up your profile</h2>
+        <div style={{display:'flex',alignItems:'center',gap:16,marginBottom:12}}>
+          <div className="login-brand logo" style={{fontSize:20}}>TS</div>
+          <div>
+            <h2 style={{margin:0,fontSize:20}}>Almost there — set up your profile</h2>
+            <div style={{fontSize:13,color:'#9aa6b2'}}>A few details to personalize your board</div>
+          </div>
+        </div>
+
         <form onSubmit={handleSubmit} className="space-y-3">
-          <input className="focus-ring" placeholder="Display name" value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
-          <input className="focus-ring" placeholder="Full name" value={fullName} onChange={(e) => setFullName(e.target.value)} />
-          <input className="focus-ring" placeholder="Username (optional)" value={username} onChange={(e) => setUsername(e.target.value)} />
-          {error && <div className="text-red-600">{error}</div>}
-          <div className="flex gap-2">
-            <button type="submit" className="btn-ghost" disabled={saving}>{saving ? 'Saving...' : 'Save and Continue'}</button>
+          <div style={{display:'grid',gridTemplateColumns:'1fr',gap:10}}>
+            <input className="input-field focus-ring" placeholder="Display name" value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
+            <input className="input-field focus-ring" placeholder="Full name" value={fullName} onChange={(e) => setFullName(e.target.value)} />
+            <input className="input-field focus-ring" placeholder="Username (optional)" value={username} onChange={(e) => setUsername(e.target.value)} />
+          </div>
+
+          {error && <div style={{color:'#ffb4b4',fontSize:13}}>{error}</div>}
+
+          <div style={{display:'flex',justifyContent:'flex-end',gap:10}}>
+            <button type="button" className="btn-ghost" onClick={() => {}} aria-hidden>Cancel</button>
+            <button type="submit" className="btn-primary" disabled={saving}>{saving ? 'Saving...' : 'Save and Continue'}</button>
           </div>
         </form>
       </div>

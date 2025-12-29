@@ -71,34 +71,41 @@ const Board = () => {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="title"
-          placeholder="Task Title"
-          value={newTask.title}
-          onChange={handleInputChange}
-          required
-        />
-        <input
-          type="text"
-          name="description"
-          placeholder="Task Description"
-          value={newTask.description}
-          onChange={handleInputChange}
-        />
-        <button type="submit">
-          Add Task
-        </button>
-      </form>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+    <div className="board-wrapper">
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:12}}>
+        <form onSubmit={handleSubmit} style={{display:'flex',gap:8,flex:1}}>
+          <input
+            className="input-field"
+            type="text"
+            name="title"
+            placeholder="Task Title"
+            value={newTask.title}
+            onChange={handleInputChange}
+            required
+          />
+          <input
+            className="input-field"
+            type="text"
+            name="description"
+            placeholder="Short description (optional)"
+            value={newTask.description}
+            onChange={handleInputChange}
+          />
+          <button className="btn-primary" type="submit" disabled={loading}>{loading ? 'Adding…' : 'Add'}</button>
+        </form>
+        <div style={{marginLeft:12}}>
+          <button className="refresh-button" onClick={() => window.location.reload()}>Refresh</button>
+        </div>
+      </div>
+
+      {error && <p style={{ color: 'salmon' }}>{error}</p>}
+
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="board">
           <Droppable droppableId="To Do">
             {(provided) => (
               <div ref={provided.innerRef} {...provided.droppableProps} className="column">
-                <h2>To Do</h2>
+                <h2>To Do <span className="col-meta">({tasks.filter(t=>t.status==='To Do').length})</span></h2>
                 {tasks.filter(task => task.status === 'To Do').map((task, index) => (
                   <Column key={task._id} task={task} index={index} onDelete={handleDelete} />
                 ))}
@@ -109,7 +116,7 @@ const Board = () => {
           <Droppable droppableId="In Progress">
             {(provided) => (
               <div ref={provided.innerRef} {...provided.droppableProps} className="column">
-                <h2>In Progress</h2>
+                <h2>In Progress <span className="col-meta">({tasks.filter(t=>t.status==='In Progress').length})</span></h2>
                 {tasks.filter(task => task.status === 'In Progress').map((task, index) => (
                   <Column key={task._id} task={task} index={index} onDelete={handleDelete} />
                 ))}
@@ -120,7 +127,7 @@ const Board = () => {
           <Droppable droppableId="Done">
             {(provided) => (
               <div ref={provided.innerRef} {...provided.droppableProps} className="column">
-                <h2>Done</h2>
+                <h2>Done <span className="col-meta">({tasks.filter(t=>t.status==='Done').length})</span></h2>
                 {tasks.filter(task => task.status === 'Done').map((task, index) => (
                   <Column key={task._id} task={task} index={index} onDelete={handleDelete} />
                 ))}

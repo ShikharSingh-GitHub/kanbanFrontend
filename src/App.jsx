@@ -49,24 +49,34 @@ const App = () => {
         <Profile onSaved={() => setNeedsProfile(false)} />
       ) : (
         <>
-          <header className="bg-white shadow">
-            <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-              <h1 className="text-2xl font-bold text-gray-900">Kanban Board</h1>
-              <div className="flex items-center space-x-4">
-                <span className="text-sm text-gray-700">
-                  {currentUser.displayName || currentUser.email}
-                </span>
-                <button
-                  onClick={() => auth.signOut()}
-                  className="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                >
-                  Sign Out
-                </button>
+          <header className="app-header">
+            <div className="brand">
+              <div className="logo">TS</div>
+              <div>
+                <h1>Taskify</h1>
+                <div className="tagline">A simple, fast Kanban board</div>
               </div>
             </div>
+            <div className="user-info">
+              <div style={{textAlign:'right'}}>
+                <div style={{fontSize:12,color:'#9aa6b2'}}>{currentUser.email}</div>
+                <div style={{fontSize:13,fontWeight:600}}>{currentUser.displayName || ''}</div>
+              </div>
+              <div className="avatar">{(currentUser.displayName||currentUser.email||'U')[0]?.toUpperCase()}</div>
+              <button
+                onClick={() => auth.signOut()}
+                className="btn-ghost focus-ring"
+                aria-label="Sign out"
+              >
+                Sign Out
+              </button>
+            </div>
           </header>
-          <main className="p-4">
-            <Board />
+
+          <main>
+            <div className="main-container">
+              <Board />
+            </div>
           </main>
         </>
       )}

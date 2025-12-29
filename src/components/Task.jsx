@@ -11,11 +11,21 @@ const Task = ({ task, onDelete }) => {
     }
   };
 
+  const shortDate = task.createdAt ? new Date(task.createdAt).toLocaleDateString() : null;
+
   return (
     <div className="task">
-      <h3>{task.title}</h3>
-      <p>{task.description}</p>
-      <button onClick={handleDelete}>Delete</button>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:8}}>
+        <h3>{task.title}</h3>
+        <div style={{display:'flex',gap:8,alignItems:'center'}}>
+          {shortDate && <div style={{fontSize:12,color:'#8f9aa3'}}>{shortDate}</div>}
+          <button className="btn-danger" onClick={handleDelete} aria-label={`Delete ${task.title}`}>Delete</button>
+        </div>
+      </div>
+      {task.description && <p>{task.description}</p>}
+      <div className="task-meta">
+        <div>{task.assignee || ''}</div>
+      </div>
     </div>
   );
 };
