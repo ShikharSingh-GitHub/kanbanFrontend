@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from './context/AuthContext';
 import Board from './components/Board';
 import Login from './components/Login';
+import Profile from './components/Profile';
 import { auth } from './firebase/config';
+import api from './api';
 import './App.css';
 
 const App = () => {
   const { currentUser } = useAuth();
   const [loading, setLoading] = useState(true);
+  const [needsProfile, setNeedsProfile] = useState(false);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(() => {
@@ -15,6 +18,20 @@ const App = () => {
     });
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    const checkProfile = async () => {
+      if (!currentUser) return setNeedsProfile(false);
+      try {
+        await api.get('/api/users/me');
+        setNeedsProfile(false);
+      } catch (err) {
+        if (err?.response?.status === 404) setNeedsProfile(true);
+        else setNeedsProfile(false);
+      }
+    };
+    checkProfile();
+  }, [currentUser]);
 
   if (loading) {
     return (
@@ -28,6 +45,8 @@ const App = () => {
     <div className="app">
       {!currentUser ? (
         <Login />
+      ) : needsProfile ? (
+        <Profile onSaved={() => setNeedsProfile(false)} />
       ) : (
         <>
           <header className="bg-white shadow">
