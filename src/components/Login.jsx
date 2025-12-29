@@ -1,58 +1,47 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { FaGoogle, FaGithub } from 'react-icons/fa';
+import { FaGoogle } from 'react-icons/fa';
 
 const Login = () => {
-  const { signInWithGoogle, signInWithGitHub } = useAuth();
+  const { signInWithGoogle } = useAuth();
   const [error, setError] = useState('');
 
   const handleGoogleSignIn = async () => {
     try {
       setError('');
       await signInWithGoogle();
-    } catch (error) {
+    } catch (err) {
       setError('Failed to sign in with Google');
-      console.error(error);
-    }
-  };
-
-  const handleGitHubSignIn = async () => {
-    try {
-      setError('');
-      await signInWithGitHub();
-    } catch (error) {
-      setError('Failed to sign in with GitHub');
-      console.error(error);
+      console.error(err);
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center">Welcome to Kanban Board</h2>
-        
+    <div className="fixed inset-0 bg-gradient-to-br from-slate-900/60 to-slate-800/40 flex items-center justify-center p-4">
+      <div className="bg-white/95 backdrop-blur-sm p-8 rounded-xl shadow-2xl w-full max-w-md">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-16 h-16 rounded-full bg-blue-500 flex items-center justify-center text-white text-2xl font-bold">KB</div>
+          <h2 className="text-3xl font-extrabold">Kanban Board</h2>
+          <p className="text-sm text-gray-600 text-center">Sign in to access your personal kanban board and manage tasks.</p>
+        </div>
+
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          <div className="mt-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
             {error}
           </div>
         )}
 
-        <div className="space-y-4">
+        <div className="mt-6 space-y-4">
           <button
             onClick={handleGoogleSignIn}
-            className="w-full flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition duration-200"
+            className="w-full flex items-center justify-center gap-3 bg-white border border-gray-200 hover:shadow-sm text-gray-800 font-semibold py-2 px-4 rounded transition duration-150"
+            aria-label="Sign in with Google"
           >
-            <FaGoogle />
-            Continue with Google
+            <FaGoogle className="text-red-500" />
+            <span>Continue with Google</span>
           </button>
-          
-          <button
-            onClick={handleGitHubSignIn}
-            className="w-full flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-900 text-white font-semibold py-2 px-4 rounded transition duration-200"
-          >
-            <FaGithub />
-            Continue with GitHub
-          </button>
+
+          <div className="text-xs text-center text-gray-500">By continuing, you agree to the app's Terms.</div>
         </div>
       </div>
     </div>

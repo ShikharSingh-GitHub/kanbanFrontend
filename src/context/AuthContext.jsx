@@ -6,7 +6,7 @@ import {
   getIdToken
 } from 'firebase/auth';
 import { setAuthToken } from '../api';
-import { auth, googleProvider, githubProvider } from '../firebase/config';
+import { auth, googleProvider } from '../firebase/config';
 
 const AuthContext = createContext();
 
@@ -24,15 +24,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Sign in with GitHub
-  const signInWithGitHub = async () => {
-    try {
-      await signInWithPopup(auth, githubProvider);
-    } catch (error) {
-      console.error("Error signing in with GitHub:", error);
-      throw error;
-    }
-  };
 
   // Sign out
   const logOut = () => {
@@ -63,7 +54,6 @@ export const AuthProvider = ({ children }) => {
   const value = {
     currentUser,
     signInWithGoogle,
-    signInWithGitHub,
     logOut,
   };
 
