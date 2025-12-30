@@ -12,11 +12,14 @@ const Board = () => {
   useEffect(() => {
     const fetchTasks = async () => {
       setLoading(true);
+      setError('');
       try {
         const { data } = await api.get('/api/tasks');
         setTasks(data);
       } catch (error) {
-        setError('Error fetching tasks');
+        const message = error.response?.data?.message || 'Error fetching tasks';
+        setError(message);
+        console.error('Fetch tasks error:', error);
       }
       setLoading(false);
     };
@@ -31,12 +34,15 @@ const Board = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError('');
     try {
       const { data } = await api.post('/api/tasks', { ...newTask, status: 'To Do' });
       setTasks([...tasks, data]);
       setNewTask({ title: '', description: '' });
     } catch (error) {
-      setError('Error creating task');
+      const message = error.response?.data?.message || 'Error creating task';
+      setError(message);
+      console.error('Create task error:', error);
     }
     setLoading(false);
   };
@@ -47,6 +53,9 @@ const Board = () => {
     if (source.droppableId === destination.droppableId && source.index === destination.index) return;
 
     const draggedTask = tasks.find(task => task._id === result.draggableId);
+    const previousTasks = [...tasks];
+    
+    // Optimistic update
     const updatedTasks = tasks.map(task =>
       task._id === draggedTask._id ? { ...task, status: destination.droppableId } : task
     );
@@ -55,17 +64,26 @@ const Board = () => {
     try {
       await api.put(`/api/tasks/${draggedTask._id}`, { status: destination.droppableId });
     } catch (error) {
-      setError('Error updating task status');
+      // Revert on error
+      setTasks(previousTasks);
+      const message = error.response?.data?.message || 'Error updating task status';
+      setError(message);
+      console.error('Update task error:', error);
     }
   };
 
   const handleDelete = async (taskId) => {
+    if (!window.confirm('Delete this task?')) return;
+    
     setLoading(true);
+    setError('');
     try {
       await api.delete(`/api/tasks/${taskId}`);
       setTasks(tasks.filter(task => task._id !== taskId));
     } catch (error) {
-      setError('Error deleting task');
+      const message = error.response?.data?.message || 'Error deleting task';
+      setError(message);
+      console.error('Delete task error:', error);
     }
     setLoading(false);
   };
@@ -98,7 +116,22 @@ const Board = () => {
         </div>
       </div>
 
-      {error && <p style={{ color: 'salmon' }}>{error}</p>}
+      {error && (
+        <div style={{
+          background:'rgba(255,107,107,0.1)',
+          border:'1px solid rgba(255,107,107,0.3)',
+          borderRadius:10,
+          padding:12,
+          marginBottom:12,
+          color:'#ffb4b4',
+          display:'flex',
+          justifyContent:'space-between',
+          alignItems:'center'
+        }}>
+          <span>{error}</span>
+          <button onClick={() => setError('')} style={{background:'transparent',border:'none',color:'#ffb4b4',cursor:'pointer',fontSize:18}}>×</button>
+        </div>
+      )}
 
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="board">

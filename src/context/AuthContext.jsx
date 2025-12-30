@@ -36,7 +36,8 @@ export const AuthProvider = ({ children }) => {
       setCurrentUser(user);
       if (user) {
         try {
-          const token = await getIdToken(user);
+          // Force refresh token to ensure we have a fresh one
+          const token = await getIdToken(user, true);
           setAuthToken(token);
         } catch (err) {
           console.error('Failed to get ID token:', err);
@@ -50,6 +51,22 @@ export const AuthProvider = ({ children }) => {
 
     return () => unsubscribe();
   }, []);
+
+  // Refresh token every 50 minutes (tokens expire at 1 hour)
+  useEffect(() => {
+    if (!currentUser) return;
+    const intervalId = setInterval(async () => {
+      try {
+        const token = await getIdToken(currentUser, true);
+        setAuthToken(token);
+        console.log('Token refreshed');
+      } catch (err) {
+        console.error('Token refresh failed:', err);
+      }
+    }, 50 * 60 * 1000); // 50 minutes
+
+    return () => clearInterval(intervalId);
+  }, [currentUser]);
 
   const value = {
     currentUser,
